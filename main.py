@@ -30,7 +30,8 @@ class Main:
             "ogv", "divx",
             "xls", "xlsx", "csv", "doc", "docx", "ppt", "pptx", "pdf", "txt", "rtf",
             "zip", "rar", "7z", "tar",
-            "lnk"
+            "lnk",
+            "py", "js", "java", "cpp", "h", "cs", "rb", "go", "swift", "php", "html", "htm", "css", "sql", "json", "xml", "yaml", "yml"
         ]
 
         self.BaseDirFilesSorted = {
@@ -38,9 +39,25 @@ class Main:
                                 "Documents":{"Spreadsheets":[], "Word-Files":[], "PDFs":[], "Text":[]},
                                 "Archives":[],
                                 "Shortcuts":[],
-                                "Misc-Unsorted":[]
+                                "Misc-Unsorted":[],
 
-                                }
+                                "Programing": {
+                                 "Python": [],
+                                 "JavaScript": [],
+                                 "Java": [],
+                                 "C++": [],
+                                 "C#": [],
+                                 "Ruby": [],
+                                 "Go": [],
+                                 "Swift": [],
+                                 "PHP": [],
+                                 "HTML": [],
+                                 "CSS": [],
+                                 "SQL": [],
+                                 "JSON": [],
+                                 "XML": [],
+                                 "YAML": []},
+        }
 
         self.FileExtensionsDict = {
 
@@ -59,7 +76,26 @@ class Main:
 
             "Archives": ["zip", "rar", "7z", "tar"],
 
-            "Shortcuts": ["lnk"]
+            "Shortcuts": ["lnk"],
+
+            "Programing":{
+                "Python": ["py"],
+                "JavaScript": ["js"],
+                "Java": ["java"],
+                "C++": ["cpp", "h"],
+                "C#": ["cs"],
+                "Ruby": ["rb"],
+                "Go": ["go"],
+                "Swift": ["swift"],
+                "PHP": ["php"],
+                "HTML": ["html", "htm"],
+                "CSS": ["css"],
+                "SQL": ["sql"],
+                "JSON": ["json"],
+                "XML": ["xml"],
+                "YAML": ["yaml", "yml"]
+                # Add more programming languages and extensions as needed
+            },
 
         }
 
@@ -187,7 +223,7 @@ class Main:
 Main = Main()
 
 if __name__ == '__main__':
-    FileTypeList = ['txt', '.rtf', 'pdf', 'lnk', 'png', 'mp3', 'mp4']
+    FileTypeList = ['txt', '.rtf', 'pdf', 'lnk', 'png', 'mp3', 'mp4', 'xyz', 'xml',".py"]
     BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir'
     Main.MakeTestFiles(FileTypesList=FileTypeList, BaseFileDir=BaseDir, NestedFiles=False, Contained=False)
 
