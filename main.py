@@ -1,7 +1,13 @@
-import os, datetime, shutil
+import os, datetime, shutil, pprint
 
+import PyEnhance.Counter
+from PyEnhance import *
+
+pprint = pprint.pprint
 
 datetime = datetime.datetime
+
+Counter = PyEnhance.Counter.Counter
 
 BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir'
 StorageDir = 'C:\\DesktopRefreshTestDir\\StorageDir'
@@ -28,11 +34,11 @@ class Main:
         ]
 
         self.BaseDirFilesSorted = {
-                                "Media":{"Images":{},"Audio":{}, "Videos":{}},
-                                "Documents":{"Spreadsheets":{}, "Word-Files":{}, "PDFs":{}, "Text":{}},
-                                "Archives":{},
-                                "Shortcuts":{},
-                                "Misc-Unsorted":{}
+                                "Media":{"Images":[],"Audio":[], "Videos":[]},
+                                "Documents":{"Spreadsheets":[], "Word-Files":[], "PDFs":[], "Text":[]},
+                                "Archives":[],
+                                "Shortcuts":[],
+                                "Misc-Unsorted":[]
 
                                 }
 
@@ -61,7 +67,6 @@ class Main:
         BaseFileDir = str(BaseFileDir)
         FileTypes = list(FileTypesList)
         os.chdir(BaseFileDir)
-        print(BaseFileDir)
 
         if Contained == True:
 
@@ -129,39 +134,50 @@ class Main:
         Files = os.listdir(self.BaseDir)
         print('\n')
 
+
+
         for File in Files:
 
             if '.' not in File:
                 print('String "." not in file name')
-                print(f'The file extension for {File} is {self.FileExtension}')
+                #print(f'The file extension for {File} is {self.FileExtension}')
 
                 # Add code to check if file is a folder
 
             else:
                 LastDotIndex = File.rindex('.')
                 self.FileExtension = File[LastDotIndex+1:]
-                print(f'The file extension for {File} is {self.FileExtension}')
+                #print(f'The file extension for {File} is {self.FileExtension}')
 
             for category, subcategories in self.FileExtensionsDict.items():
+
+                if self.FileExtension in self.FileExtensionsDict[category]:
+                    self.BaseDirFilesSorted[category].append(File)
+
                 if isinstance(subcategories, dict):
                     for subcategory in subcategories:
                         #print(self.FileExtensionsDict[category][subcategory])
 
                         if self.FileExtension in self.FileExtensionsDict[category][subcategory]:
 
-                            print(subcategory)
-                            print("flag")
 
-                            self.BaseDirFilesSorted[category][subcategory] = File
-                            print(self.BaseDirFilesSorted)
+                            self.BaseDirFilesSorted[category][subcategory].append(File)
 
-                            # will add file sorting here!!!
+            if self.FileExtension not in self.AllFileExtensionsList:
+                self.BaseDirFilesSorted['Misc-Unsorted'].append(File)
+
+        pprint(self.BaseDirFilesSorted)
+
+                             #adding file sorting here!!!
 
     def StoreFiles(self):
 
         os.chdir(self.StorageDir)
         os.mkdir(self.StorageFileName)
         os.chdir(self.StorageFileName)
+
+
+
         for File in self.BaseDirFileList:
             print(f"Moving {File} to {self.StorageDir}\\{self.StorageFileName}")
             shutil.move(f"{BaseDir}\\{File}", f"{self.StorageDir}\\{self.StorageFileName}")
@@ -171,7 +187,7 @@ class Main:
 Main = Main()
 
 if __name__ == '__main__':
-    FileTypeList = ['txt', '.rtf', 'pdf']
+    FileTypeList = ['txt', '.rtf', 'pdf', 'lnk', 'png', 'mp3', 'mp4']
     BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir'
     Main.MakeTestFiles(FileTypesList=FileTypeList, BaseFileDir=BaseDir, NestedFiles=False, Contained=False)
 
