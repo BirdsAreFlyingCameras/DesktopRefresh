@@ -202,15 +202,31 @@ class Main:
             if self.FileExtension not in self.AllFileExtensionsList:
                 self.BaseDirFilesSorted['Misc-Unsorted'].append(File)
 
-        pprint(self.BaseDirFilesSorted)
+        #pprint(self.BaseDirFilesSorted)
 
-                             #adding file sorting here!!!
+        #adding file sorting here!!!
 
     def StoreFiles(self):
 
         os.chdir(self.StorageDir)
         os.mkdir(self.StorageFileName)
         os.chdir(self.StorageFileName)
+
+
+
+
+        SortedFilesToExport = []
+
+        for category, subcategories in self.BaseDirFilesSorted.items():
+            if isinstance(subcategories, dict):
+                for subcategory in subcategories:
+
+                    if self.BaseDirFilesSorted[category][subcategory]:
+                        print(f"{category}-{subcategory}")
+                        print(self.BaseDirFilesSorted[category][subcategory])
+
+
+
 
 
 
