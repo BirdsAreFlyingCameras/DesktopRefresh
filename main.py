@@ -1,23 +1,45 @@
-import os, datetime, shutil, pprint
+"""
+Desktop Refresh | Setup File
+
+Author: Bryan Brannan
+
+GitHub: BirdsAreFlyingCameras
+"""
+
+import os, datetime, shutil, pprint, sqlite3
 
 pprint = pprint.pprint
 
 datetime = datetime.datetime
 
-BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir'
-StorageDir = 'C:\\DesktopRefreshTestDir\\StorageDir'
+BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir' # will change to pull from config database
+StorageDir = 'C:\\DesktopRefreshTestDir\\StorageDir' # will change to pull from config database
 
 
 class Main:
 
     def __init__(self):
-        self.BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir' # will change to pull from config database
-        self.StorageDir = 'C:\\DesktopRefreshTestDir\\StorageDir' # will change to pull from config database
+
+        SettingsDB = sqlite3.connect("Settings.sqlite3")
+
+        Cursor = SettingsDB.cursor()
+
+        Cursor.execute('SELECT BaseDir FROM Settings')
+        for row in Cursor:
+            self.BaseDir = row[0]
+
+
+        Cursor.execute('SELECT StorageDir FROM Settings')
+        for row in Cursor:
+            self.StorageDir = row[0]
+
         self.Date = datetime.now()
         Date = self.Date
+
         self.StorageFileName = (f'{Date.month}-{Date.day}-{Date.year} ({Date.strftime("%I")}_{Date.strftime("%M")} {Date.strftime("%p")})')
 
         self.BaseDirFileList = []
+
         self.AllFileExtensionsList = [
             "jpg", "jpeg", "png", "gif", "bmp", "tiff", "ico", "webp", "svg", "eps",
             "mp3", "wav", "flac", "aac", "ogg", "wma", "m4a", "ac3", "mid", "midi",
