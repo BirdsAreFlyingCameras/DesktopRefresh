@@ -1,13 +1,8 @@
 import os, datetime, shutil, pprint
 
-import PyEnhance.Counter
-from PyEnhance import *
-
 pprint = pprint.pprint
 
 datetime = datetime.datetime
-
-Counter = PyEnhance.Counter.Counter
 
 BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir'
 StorageDir = 'C:\\DesktopRefreshTestDir\\StorageDir'
@@ -39,6 +34,7 @@ class Main:
                                 "Documents":{"Spreadsheets":[], "Word-Files":[], "PDFs":[], "Text":[]},
                                 "Archives":[],
                                 "Shortcuts":[],
+                                "Folders":[],
                                 "Misc-Unsorted":[],
 
                                 "Programing": {
@@ -118,6 +114,10 @@ class Main:
                 os.mkdir("NestedTestDir")
                 os.chdir("NestedTestDir")
 
+        #if os.path.exists("Folder"):
+         #   os.remove("Folder")
+          #  os.mkdir("Folder")
+
         for FileType in FileTypes:
             FileType = str(FileType)
 
@@ -171,19 +171,21 @@ class Main:
         print('\n')
 
 
-
         for File in Files:
 
             if '.' not in File:
                 print('String "." not in file name')
                 #print(f'The file extension for {File} is {self.FileExtension}')
 
-                # Add code to check if file is a folder
-
             else:
                 LastDotIndex = File.rindex('.')
                 self.FileExtension = File[LastDotIndex+1:]
                 #print(f'The file extension for {File} is {self.FileExtension}')
+
+
+            if os.path.isdir(File):
+              self.BaseDirFilesSorted['Folders'].append(File)
+              continue
 
             for category, subcategories in self.FileExtensionsDict.items():
 
@@ -204,7 +206,6 @@ class Main:
 
         pprint(self.BaseDirFilesSorted)
 
-                             #adding file sorting here!!!
 
     def StoreFiles(self):
 
@@ -212,11 +213,35 @@ class Main:
         os.mkdir(self.StorageFileName)
         os.chdir(self.StorageFileName)
 
+        def MakeFileCatagorys():
+
+            for category, subcategories in self.BaseDirFilesSorted.items():
+                os.chdir(f"{StorageDir}\\{self.StorageFileName}")
+                if not len(self.BaseDirFilesSorted[category]) == 0:
+                    print(f'///---{category}---///')
+                    print(self.BaseDirFilesSorted[category])
+
+                    if not os.path.exists(category):
+                        os.mkdir(category)
+                        os.chdir(category)
+
+                    if isinstance(subcategories, dict or list):
+                        for subcategory in subcategories:
+                            os.chdir(f"{StorageDir}\\{self.StorageFileName}\\{category}")
+                            if not len(self.BaseDirFilesSorted[category][subcategory]) == 0:
+                                os.mkdir(subcategory)
+                                print(f"{category}-/-/-/-/-{subcategory}")
+                                print(self.BaseDirFilesSorted[category][subcategory])
 
 
-        for File in self.BaseDirFileList:
-            print(f"Moving {File} to {self.StorageDir}\\{self.StorageFileName}")
-            shutil.move(f"{BaseDir}\\{File}", f"{self.StorageDir}\\{self.StorageFileName}")
+
+
+        MakeFileCatagorys()
+
+
+        #for File in self.BaseDirFileList:
+        #    print(f"Moving {File} to {self.StorageDir}\\{self.StorageFileName}")
+        #    shutil.move(f"{BaseDir}\\{File}", f"{self.StorageDir}\\{self.StorageFileName}")
 
 
 
