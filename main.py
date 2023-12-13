@@ -218,8 +218,8 @@ class Main:
             for category, subcategories in self.BaseDirFilesSorted.items():
                 os.chdir(f"{StorageDir}\\{self.StorageFileName}")
                 if not len(self.BaseDirFilesSorted[category]) == 0:
-                    print(f'///---{category}---///')
-                    print(self.BaseDirFilesSorted[category])
+                    #print(f'///---{category}---///')
+                    #print(self.BaseDirFilesSorted[category])
 
                     if not os.path.exists(category):
                         os.mkdir(category)
@@ -230,8 +230,16 @@ class Main:
                             os.chdir(f"{StorageDir}\\{self.StorageFileName}\\{category}")
                             if not len(self.BaseDirFilesSorted[category][subcategory]) == 0:
                                 os.mkdir(subcategory)
-                                print(f"{category}-/-/-/-/-{subcategory}")
-                                print(self.BaseDirFilesSorted[category][subcategory])
+                                #print(f"{category}-/-/-/-/-{subcategory}")
+                                #print(self.BaseDirFilesSorted[category][subcategory])
+                                for File in self.BaseDirFilesSorted[category][subcategory]:
+                                    print(f"Moving {File} to {StorageDir}\\{self.StorageFileName}\\{category}\\{subcategory}")
+                                    shutil.move(f"{BaseDir}\\{File}", f"{StorageDir}\\{self.StorageFileName}\\{category}\\{subcategory}")
+                    else:
+                        for File in self.BaseDirFilesSorted[category]:
+                            print(f"Moving {File} to {StorageDir}\\{self.StorageFileName}\\{category}")
+                            shutil.move(f"{BaseDir}\\{File}",
+                                        f"{StorageDir}\\{self.StorageFileName}\\{category}")
 
 
 
@@ -251,7 +259,6 @@ if __name__ == '__main__':
     FileTypeList = ['txt', '.rtf', 'pdf', 'lnk', 'png', 'mp3', 'mp4', 'xyz', 'xml',".py"]
     BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir'
     Main.MakeTestFiles(FileTypesList=FileTypeList, BaseFileDir=BaseDir, NestedFiles=False, Contained=False)
-
 
     Main.Checks()
     Main.IndexFiles()
