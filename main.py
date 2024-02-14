@@ -19,19 +19,21 @@ StorageDir = 'C:\\DesktopRefreshTestDir\\StorageDir' # will change to pull from 
 class Main:
 
     def __init__(self):
+        self.BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir'  # will change to pull from config database
+        self.StorageDir = 'C:\\DesktopRefreshTestDir\\StorageDir'  # will change to pull from config database
 
-        SettingsDB = sqlite3.connect("Settings.sqlite3")
-
-        Cursor = SettingsDB.cursor()
-
-        Cursor.execute('SELECT BaseDir FROM Settings')
-        for row in Cursor:
-            self.BaseDir = row[0]
-
-
-        Cursor.execute('SELECT StorageDir FROM Settings')
-        for row in Cursor:
-            self.StorageDir = row[0]
+        #SettingsDB = sqlite3.connect("Settings.sqlite3")
+#
+        #Cursor = SettingsDB.cursor()
+#
+        #Cursor.execute('SELECT BaseDir FROM Settings')
+        #for row in Cursor:
+        #    self.BaseDir = row[0]
+#
+#
+        #Cursor.execute('SELECT StorageDir FROM Settings')
+        #for row in Cursor:
+        #    self.StorageDir = row[0]
 
         self.Date = datetime.now()
         Date = self.Date
@@ -273,16 +275,14 @@ class Main:
         #    print(f"Moving {File} to {self.StorageDir}\\{self.StorageFileName}")
         #    shutil.move(f"{BaseDir}\\{File}", f"{self.StorageDir}\\{self.StorageFileName}")
 
+    def Start(self):
+        FileTypeList = ['txt', '.rtf', 'pdf', 'lnk', 'png', 'mp3', 'mp4', 'xyz', 'xml', ".py"]
+        BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir'
+        Main.MakeTestFiles(FileTypesList=FileTypeList, BaseFileDir=BaseDir, NestedFiles=False, Contained=False)
+
+        Main.Checks()
+        Main.IndexFiles()
+        Main.StoreFiles()
 
 
 Main = Main()
-
-if __name__ == '__main__':
-    FileTypeList = ['txt', '.rtf', 'pdf', 'lnk', 'png', 'mp3', 'mp4', 'xyz', 'xml',".py"]
-    BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir'
-    Main.MakeTestFiles(FileTypesList=FileTypeList, BaseFileDir=BaseDir, NestedFiles=False, Contained=False)
-
-    Main.Checks()
-    Main.IndexFiles()
-    Main.StoreFiles()
-

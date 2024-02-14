@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
-
+from main import Main
 class MainWindow(QMainWindow):
 
     def __init__(self):
@@ -69,6 +69,7 @@ class MainWindow(QMainWindow):
             super(MainWindow).__init__()
 
         def RefreshButtonEvent(self):
+            Main.Start()
             print("Refresh Button Event")
 
         def ConfigButtonEvent(self):
