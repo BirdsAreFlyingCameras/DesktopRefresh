@@ -1,5 +1,5 @@
 """
-Desktop Refresh | Setup File
+Desktop Refresh | Main File
 
 Author: Bryan Brannan
 
