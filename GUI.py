@@ -7,15 +7,26 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow,self).__init__()
 
-        self.setGeometry(500,500,500,300)
+        self.setGeometry(500,500,500,200)
         self.setWindowTitle("Desktop Refresh")
+
 
         self.Layout = QVBoxLayout()
 
         TitleLabel = QLabel("Desktop Refresh")
+        TitleLabel.setObjectName('TitleHeader')
         self.Layout.addWidget(TitleLabel)
+        TitleLabel.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+
         self.ButtonEvents = self.ButtonEvents()
         self.DisplayButtons()
+
+        self.SetStyleSheet()
+
+    def SetStyleSheet(self):
+        with open('StyleSheet.qss', 'r') as File:
+            Styles = File.read()
+            self.setStyleSheet(Styles)
 
 
 
