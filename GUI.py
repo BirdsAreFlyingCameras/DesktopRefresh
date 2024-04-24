@@ -1,131 +1,58 @@
-import sys
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import Qt
-from main import Main
+import tkinter
+import customtkinter
 
-class MainWindow(QMainWindow):
+
+CT = customtkinter.CTk()
+customtkinter.set_appearance_mode("dark")
+
+
+class Main:
 
     def __init__(self):
-        super(MainWindow,self).__init__()
 
-        self.setGeometry(500,500,500,200)
-        self.setWindowTitle("Desktop Refresh")
+        self.WindowHeight = 300
+        self.WindowWidth = 510
 
-        self.BaseMenu = BaseMenu(self)
-        self.ConfigMenu = ConfigMenu(self)
-
+        CT.geometry(f"{self.WindowWidth}x{self.WindowHeight}")
+        CT.title("Desktop Refresh")
 
 
-        self.StackedWidget = QStackedWidget()
+        TitleLabelFont = customtkinter.CTkFont(family="Roboto", size=50, weight="bold")
 
 
-        self.StackedWidget.addWidget(self.BaseMenu)
-        self.StackedWidget.addWidget(self.ConfigMenu)
+        TitleLabel = customtkinter.CTkLabel(master=CT, text="Desktop Refresh", fg_color="transparent", font=TitleLabelFont,justify="center")
+        TitleLabel.place(relx=0.5, rely=0.2, anchor='center')
 
-        self.setCentralWidget(self.StackedWidget)
+        self.Buttons()
+        CT.mainloop()
 
-    def SwitchWindows(self, WindowName):
-
-        if WindowName == "ConfigWindow":
-            self.StackedWidget.setCurrentWidget(self.ConfigMenu)
-
-        if WindowName == "MainMenu":
-            self.StackedWidget.setCurrentWidget(self.BaseMenu)
+    def Buttons(self):
 
 
-class BaseMenu(QWidget):
-    def __init__(self, MainWindow):
-        super().__init__()
+        self.ButtonHeight = 50
+        self.ButtonWidth = 450
 
-        self.MainWindow = MainWindow
+        self.ButtonFrameHeight = int((self.WindowHeight/3)*2)
+        self.ButtonFrameWidth = self.ButtonWidth
+        self.ButtonFrame = customtkinter.CTkFrame(master=CT, height=int(self.ButtonFrameHeight), width=int(self.ButtonFrameWidth))
+        self.ButtonFrame.configure(fg_color="transparent")
+        self.ButtonFrame.grid(row=2, column=0, stick="nsew")
 
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
-        TitleLabel = QLabel("Desktop Refresh")
-        TitleLabel.setObjectName('TitleHeader')
-        self.layout.addWidget(TitleLabel)
-        TitleLabel.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        self.SetStyleSheet()
-        self.DisplayButtons()
-    def SetStyleSheet(self):
-        with open('StyleSheet.qss', 'r') as File:
-            Styles = File.read()
-            self.setStyleSheet(Styles)
-    def DisplayButtons(self):
-        RefreshButton = QPushButton("Refresh", self)
-        RefreshButton.setObjectName('RefreshButton')
-        RefreshButton.clicked.connect(self.ButtonHandler)
-        self.layout.addWidget(RefreshButton)
-        ConfigButton = QPushButton("Config", self)
-        ConfigButton.setObjectName('ConfigButton')
-        ConfigButton.clicked.connect(self.ButtonHandler)
-        self.layout.addWidget(ConfigButton)
-    def ButtonHandler(self):
-        sender = self.sender()  # Get the sender object
-        ButtonName = sender.objectName()  # Get the object name of the sender
-        print(f"Button clicked: {ButtonName}")
+        ButtonFont = customtkinter.CTkFont(family="Roboto", size=30, weight="bold")
 
-        if ButtonName == "RefreshButton":
-            print("Refresh Button Handler Flag")
-            self.RefreshButtonEvent()
-
-        if ButtonName == "ConfigButton":
-            print("Config Button Handler Flag")
-            self.ConfigButtonEvent()
-
-    def RefreshButtonEvent(self):
-        Main.Start()
-        print("Refresh Button Event")
-
-    def ConfigButtonEvent(self):
-        print("Config Button Event")
-        self.MainWindow.SwitchWindows(WindowName="ConfigWindow")
-
-class ConfigMenu(QWidget):
-    def __init__(self, MainWindow):
-        super().__init__()
-
-        self.MainWindow = MainWindow
-
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
-
-        TitleLabel = QLabel("Desktop Refresh")
-        TitleLabel.setObjectName('TitleHeader')
-        TitleLabel.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-
-        self.layout.addWidget(TitleLabel)
-
-        self.SetStyleSheet()
-        self.DisplayButtons()
-
-    def DisplayButtons(self):
-        ReturnToMainMenuButton = QPushButton("Return To Main Menu", self)
-        ReturnToMainMenuButton.setObjectName('MainMenuButton')
-        ReturnToMainMenuButton.clicked.connect(self.ButtonHandler)
-        self.layout.addWidget(ReturnToMainMenuButton)
-
-    def ButtonHandler(self):
-        sender = self.sender()  # Get the sender object
-        ButtonName = sender.objectName()  # Get the object name of the sender
-        print(f"Button clicked: {ButtonName}")
-
-        if ButtonName == "MainMenuButton":
-            print("Refresh Button Handler Flag")
-            self.MainMenuButtonEvent()
-
-    def MainMenuButtonEvent(self):
-        print("Config Button Event")
-        self.MainWindow.SwitchWindows(WindowName="MainMenu")
-    def SetStyleSheet(self):
-        with open('StyleSheet.qss', 'r') as File:
-            Styles = File.read()
-            self.setStyleSheet(Styles)
+        print(self.ButtonFrameHeight)
+        print(self.ButtonFrameWidth)
 
 
+        RefreshButton = customtkinter.CTkButton(master=self.ButtonFrame, text="Refresh", height= self.ButtonHeight,
+                                                width=self.ButtonWidth, font=ButtonFont)
+        RefreshButton.grid(row=1)
+
+        SettingsButton = customtkinter.CTkButton(master=self.ButtonFrame, text="Settings", height=self.ButtonHeight,
+                                                 width=self.ButtonWidth, font=ButtonFont)
+        SettingsButton.grid(row=2,pady=20)
 
 
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-app.exec()
+        self.ButtonFrame.place(x=int((self.WindowWidth - self.ButtonFrameWidth)/2), y=int((self.ButtonFrameHeight/2) + self.WindowHeight/9))
+
+Main()
