@@ -265,9 +265,6 @@ class Main:
                             shutil.move(f"{BaseDir}\\{File}",
                                         f"{StorageDir}\\{self.StorageFileName}\\{category}")
 
-
-
-
         MakeFileCatagorys()
 
 
