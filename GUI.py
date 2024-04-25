@@ -9,21 +9,22 @@ CT = customtkinter.CTk()
 customtkinter.set_appearance_mode("dark")
 
 
-class Main:
+class MainWindow(customtkinter.CTk):
 
     def __init__(self):
+        super().__init__()
 
         self.WindowHeight = 300
         self.WindowWidth = 510
 
-        CT.geometry(f"{self.WindowWidth}x{self.WindowHeight}")
-        CT.title("Desktop Refresh")
+        self.geometry(f"{self.WindowWidth}x{self.WindowHeight}")
+        self.title("Desktop Refresh")
 
 
         TitleLabelFont = customtkinter.CTkFont(family="Roboto", size=50, weight="bold")
 
 
-        TitleLabel = customtkinter.CTkLabel(master=CT, text="Desktop Refresh", fg_color="transparent",
+        TitleLabel = customtkinter.CTkLabel(master=self, text="Desktop Refresh", fg_color="transparent",
                                             font=TitleLabelFont,justify="center")
 
         TitleLabel.place(relx=0.5, rely=0.2, anchor='center')
@@ -31,7 +32,7 @@ class Main:
 
         self.ButtonEvents()
         self.Buttons()
-        CT.mainloop()
+        self.mainloop()
 
     def Buttons(self):
 
@@ -40,7 +41,7 @@ class Main:
 
         self.ButtonFrameHeight = int((self.WindowHeight/3)*2)
         self.ButtonFrameWidth = self.ButtonWidth
-        self.ButtonFrame = customtkinter.CTkFrame(master=CT, height=int(self.ButtonFrameHeight), width=int(self.ButtonFrameWidth))
+        self.ButtonFrame = customtkinter.CTkFrame(master=self, height=int(self.ButtonFrameHeight), width=int(self.ButtonFrameWidth))
         self.ButtonFrame.configure(fg_color="transparent")
         self.ButtonFrame.grid(row=2, column=0, stick="nsew")
 
@@ -54,7 +55,7 @@ class Main:
 
 
         SettingsButton = customtkinter.CTkButton(master=self.ButtonFrame, text="Settings", height=self.ButtonHeight,
-                                                 width=self.ButtonWidth, font=ButtonFont)
+                                                 width=self.ButtonWidth, font=ButtonFont, command=self.SettingsButtonEventCall)
         SettingsButton.grid(row=2,pady=20)
 
 
@@ -65,6 +66,32 @@ class Main:
         def RefreshButtonEvent():
             FileSort.Start()
 
-        self.RefreshButtonEventCall = RefreshButtonEvent
+        def SettingsButtonEvent():
+            self.SettingsWindow = SettingsWindow(self)
 
-Main()
+
+        self.RefreshButtonEventCall = RefreshButtonEvent
+        self.SettingsButtonEventCall = SettingsButtonEvent
+
+
+class SettingsWindow(customtkinter.CTkToplevel):
+    def __init__(self, master=None):
+
+        super().__init__(master)
+        self.WindowHeight = 300
+        self.WindowWidth = 510
+
+        self.geometry(f"{self.WindowWidth}x{self.WindowHeight}")
+        self.title("Desktop Refresh - Settings")
+
+        TitleLabelFont = customtkinter.CTkFont(family="Roboto", size=50, weight="bold")
+
+
+        TitleLabel = customtkinter.CTkLabel(master=self, text="Settings", fg_color="transparent",
+                                            font=TitleLabelFont,justify="center")
+
+        TitleLabel.place(relx=0.5, rely=0.2, anchor='center')
+
+
+
+MainWindow()
