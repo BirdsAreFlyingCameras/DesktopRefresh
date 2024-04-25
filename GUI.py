@@ -1,6 +1,7 @@
 import tkinter
 import customtkinter
 from main import Main as FileSort
+from tkinter import filedialog
 
 
 
@@ -68,21 +69,19 @@ class MainWindow(customtkinter.CTk):
 
         def SettingsButtonEvent():
             self.SettingsWindow = SettingsWindow(self)
+            self.SettingsWindow.grid()
 
 
         self.RefreshButtonEventCall = RefreshButtonEvent
         self.SettingsButtonEventCall = SettingsButtonEvent
 
 
-class SettingsWindow(customtkinter.CTkToplevel):
+class SettingsWindow(customtkinter.CTkFrame):
     def __init__(self, master=None):
-
         super().__init__(master)
         self.WindowHeight = 300
         self.WindowWidth = 510
-
-        self.geometry(f"{self.WindowWidth}x{self.WindowHeight}")
-        self.title("Desktop Refresh - Settings")
+        self.configure(width=self.WindowWidth, height=self.WindowHeight)
 
         TitleLabelFont = customtkinter.CTkFont(family="Roboto", size=50, weight="bold")
 
@@ -93,5 +92,60 @@ class SettingsWindow(customtkinter.CTkToplevel):
         TitleLabel.place(relx=0.5, rely=0.2, anchor='center')
 
 
+        self.SavePathEntry = customtkinter.StringVar(self,"C:\\Save-Path-Name-Here")
 
+
+        self.ItemFrameHeight = int((self.WindowHeight/3)*2)
+        self.ItemFrameWidth = 450
+        self.ItemFrame = customtkinter.CTkFrame(master=self, height=int(self.ItemFrameHeight), width=int(self.ItemFrameWidth))
+        self.ItemFrame.configure(fg_color="transparent")
+        self.ItemFrame.grid(row=3, column=0, stick="nsew")
+
+
+
+
+        self.ButtonFont = customtkinter.CTkFont(family="Roboto", size=30, weight="bold")
+
+        self.ButtonEvents()
+        self.Buttons()
+        self.Inputs()
+
+
+    def Inputs(self):
+        pass
+
+    def Buttons(self):
+
+        self.ButtonHeight = 50
+        self.ButtonWidth = 450
+
+        self.SavePathEntryButton = customtkinter.CTkButton(master=self.ItemFrame, text="Choose Save File Path",
+                                                           height=self.ButtonHeight,
+                                                           width=self.ButtonWidth, font=self.ButtonFont,
+                                                           command=self.SavePathEntryButtonCall)
+
+        self.SavePathEntryButton.grid(row=1)
+
+
+        BackButton = customtkinter.CTkButton(master=self.ItemFrame, text="Back To Main Menu", height=self.ButtonHeight,
+                                                 width=self.ButtonWidth, font=self.ButtonFont,
+                                                 command=self.BackButtonEventCall)
+        BackButton.grid(row=3)
+
+
+
+        self.ItemFrame.place(x=int((self.WindowWidth - self.ItemFrameWidth)/2), y=int((self.ItemFrameHeight/2) + self.WindowHeight/9))
+
+
+    def ButtonEvents(self):
+        def BackButtonEvent():
+            self.destroy()
+
+        self.BackButtonEventCall = BackButtonEvent
+
+        def SavePathEntryButton():
+            tkinter.Tk().withdraw()
+            FolderPath = filedialog.askdirectory()
+            print(FolderPath)
+        self.SavePathEntryButtonCall = SavePathEntryButton
 MainWindow()
