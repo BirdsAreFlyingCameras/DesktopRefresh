@@ -19,26 +19,6 @@ StorageDir = 'C:\\DesktopRefreshTestDir\\StorageDir' # will change to pull from 
 class Main:
 
     def __init__(self):
-        self.BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir'  # will change to pull from config database
-        self.StorageDir = 'C:\\DesktopRefreshTestDir\\StorageDir'  # will change to pull from config database
-
-        #SettingsDB = sqlite3.connect("Settings.sqlite3")
-#
-        #Cursor = SettingsDB.cursor()
-#
-        #Cursor.execute('SELECT BaseDir FROM Settings')
-        #for row in Cursor:
-        #    self.BaseDir = row[0]
-#
-#
-        #Cursor.execute('SELECT StorageDir FROM Settings')
-        #for row in Cursor:
-        #    self.StorageDir = row[0]
-
-        self.Date = datetime.now()
-        Date = self.Date
-
-        self.StorageFileName = (f'{Date.month}-{Date.day}-{Date.year} ({Date.strftime("%I")}_{Date.strftime("%M")} {Date.strftime("%p")})')
 
         self.BaseDirFileList = []
 
@@ -120,6 +100,8 @@ class Main:
         }
 
     def MakeTestFiles(self,FileTypesList=None, NestedFiles=None, BaseFileDir=None, Contained = None):
+
+        OrginDir = os.path.abspath(os.curdir)
         BaseFileDir = str(BaseFileDir)
         FileTypes = list(FileTypesList)
         os.chdir(BaseFileDir)
@@ -160,6 +142,28 @@ class Main:
 
             with open(f'{TestFileName}', "x") as File:
                 File.write(f'This is a {FileType} file')
+
+        os.chdir(OrginDir)
+    def Init(self):
+
+        SettingsDB = sqlite3.connect("Settings.sqlite3")
+
+        Cursor = SettingsDB.cursor()
+
+        Cursor.execute('SELECT BaseDir FROM Settings')
+        for row in Cursor:
+            self.BaseDir = row[0]
+
+        Cursor.execute('SELECT StorageDir FROM Settings')
+        for row in Cursor:
+            self.StorageDir = row[0]
+
+
+        self.Date = datetime.now()
+        Date = self.Date
+
+        self.StorageFileName = (f'{Date.month}-{Date.day}-{Date.year} ({Date.strftime("%I")}_{Date.strftime("%M")} {Date.strftime("%p")})')
+
 
     def Checks(self):
 
@@ -275,8 +279,9 @@ class Main:
     def Start(self):
         FileTypeList = ['txt', '.rtf', 'pdf', 'lnk', 'png', 'mp3', 'mp4', 'xyz', 'xml', ".py"]
         BaseDir = 'C:\\DesktopRefreshTestDir\\BaseDir'
-        Main.MakeTestFiles(FileTypesList=FileTypeList, BaseFileDir=BaseDir, NestedFiles=False, Contained=False)
+        #Main.MakeTestFiles(FileTypesList=FileTypeList, BaseFileDir=BaseDir, NestedFiles=False, Contained=False)
 
+        Main.Init()
         Main.Checks()
         Main.IndexFiles()
         Main.StoreFiles()

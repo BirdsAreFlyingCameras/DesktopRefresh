@@ -2,8 +2,7 @@ import tkinter
 import customtkinter
 from main import Main as FileSort
 from tkinter import filedialog
-
-
+from Config import Config
 
 
 CT = customtkinter.CTk()
@@ -62,15 +61,14 @@ class MainWindow(customtkinter.CTk):
 
         self.ButtonFrame.place(x=int((self.WindowWidth - self.ButtonFrameWidth)/2), y=int((self.ButtonFrameHeight/2) + self.WindowHeight/9))
 
-    def ButtonEvents(self):
 
+    def ButtonEvents(self):
         def RefreshButtonEvent():
             FileSort.Start()
 
         def SettingsButtonEvent():
             self.SettingsWindow = SettingsWindow(self)
             self.SettingsWindow.grid()
-
 
         self.RefreshButtonEventCall = RefreshButtonEvent
         self.SettingsButtonEventCall = SettingsButtonEvent
@@ -119,12 +117,21 @@ class SettingsWindow(customtkinter.CTkFrame):
         self.ButtonHeight = 50
         self.ButtonWidth = 450
 
-        self.SavePathEntryButton = customtkinter.CTkButton(master=self.ItemFrame, text="Choose Save File Path",
+
+        self.BasePathEntryButton = customtkinter.CTkButton(master=self.ItemFrame, text="Choose Base File Path",
                                                            height=self.ButtonHeight,
                                                            width=self.ButtonWidth, font=self.ButtonFont,
-                                                           command=self.SavePathEntryButtonCall)
+                                                           command=self.BasePathEntryButtonCall)
 
-        self.SavePathEntryButton.grid(row=1)
+        self.BasePathEntryButton.grid(row=1)
+
+
+        self.StoragePathEntryButton = customtkinter.CTkButton(master=self.ItemFrame, text="Choose Storage File Path",
+                                                           height=self.ButtonHeight,
+                                                           width=self.ButtonWidth, font=self.ButtonFont,
+                                                           command=self.StoragePathEntryButtonCall)
+
+        self.StoragePathEntryButton.grid(row=2)
 
 
         BackButton = customtkinter.CTkButton(master=self.ItemFrame, text="Back To Main Menu", height=self.ButtonHeight,
@@ -140,12 +147,20 @@ class SettingsWindow(customtkinter.CTkFrame):
     def ButtonEvents(self):
         def BackButtonEvent():
             self.destroy()
-
         self.BackButtonEventCall = BackButtonEvent
-
-        def SavePathEntryButton():
+        def BasePathEntryButton():
             tkinter.Tk().withdraw()
             FolderPath = filedialog.askdirectory()
-            print(FolderPath)
-        self.SavePathEntryButtonCall = SavePathEntryButton
+            Config.PathConfig(BaseDir=FolderPath)
+
+        self.BasePathEntryButtonCall = BasePathEntryButton
+
+        def StoragePathEntryButton():
+            tkinter.Tk().withdraw()
+            FolderPath = filedialog.askdirectory()
+            Config.PathConfig(StorageDir=FolderPath)
+
+        self.StoragePathEntryButtonCall = StoragePathEntryButton
+
+
 MainWindow()
